@@ -1,3 +1,5 @@
+#gas_library.py
+#This file defines gas properties costs.
 from openmdao.main.api import Component, VariableTree
 from openmdao.lib.datatypes.api import Float, VarTree
 
