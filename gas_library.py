@@ -9,8 +9,6 @@ class Gas(VariableTree):
 	rho_ntp = Float(0.1786, desc='density at Normal TP 293.15 K and 1 atm', units='kg/m**3')
 
 
-
-
 #Library Values
 #http://www.engineeringtoolbox.com/gas-density-d_158.html
 

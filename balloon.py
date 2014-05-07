@@ -13,37 +13,47 @@ class Balloon(Assembly):
     #Inputs
 
 	#Design Variables  
+    volume = Float(5000, desc='', units='m**3')
+
+
     mass = Float(200, iotype='in', desc='Payload Mass', units='kg', low=150, high=220)     
     max_alt = Float(100, iotype='in', desc='Desired Max Altitude', low=0, high=220)
     max_rise_time = Float(24, iotype='h', desc='Maximum balloon rise time')
 
     #GHAPS Constants
 
-    #def configure(self):
+    def configure(self):
 
         #Add Components
-        #compress = self.add('compress', CompressionSystem())
+        self.add('GHAPS', GHAPS())
+        self.add('NASA_Fly', NASA_Fly())
+        self.add('GasCalc', GasCalc())
+        self.add('BalloonCalc', GasCalc())
 
-        #Boundary Input Connections
-        #Hyperloop -> Compress
-        #self.connect('Mach_pod_max', 'compress.Mach_pod_max')
-        
+        #Component Connections
+        #GHAPS -> NASA_Fly
+        self.connect('GHAPS.v_terminal', 'NASA_Fly.v_terminal')
+        #NASA_Fly -> GasCalc
+        self.connect('NASA_Fly.mass','GasCalc.payload_mass')
+        #GasCalc -> BalloonCalc
+        self.connect('GasCalc.gas_vol','BallCalc.vol')
+        #Feedback
+        #BalloonCalc -> GasCalc
+        #self.connect('BallCalc.balloon_mass','GasCalc.balloon_mass')
 
         #Add Solver
-        #solver = self.add('solver',BroydenSolver())
-        #solver.itmax = 50 #max iterations
-        #solver.tol = .001
+        solver = self.add('solver',BroydenSolver())
+        solver.itmax = 50 #max iterations
+        solver.tol = .001
         #Add Parameters and Constraints
-        #solver.add_parameter('compress.W_in',low=-1e15,high=1e15)
+        solver.add_parameter(['NASA_Fly.balloon_mass','BallCalc.balloon_mass'], low=-1e-15, high=1e15)
+        solver.add_parameter(['NASA_Fly.balloon_mass', 'pod.radius_tube_inner'], low=-1e15, high=1e15)
 
-        #solver.add_parameter(['compress.Ts_tube','flow_limit.Ts_tube','tube_wall_temp.temp_boundary'], low=-1e-15, high=1e15)
-        #solver.add_parameter(['flow_limit.radius_tube', 'pod.radius_tube_inner'], low=-1e15, high=1e15)
-
-        #driver = self.driver
-        #driver.workflow.add('solver')
+        driver = self.driver
+        driver.workflow.add('solver')
         
         #Declare Solver Workflow
-        #solver.workflow.add(['compress','mission','pod','flow_limit','tube_wall_temp'])
+        solver.workflow.add(['GHAPS','NASA_Fly','GasCalc','BallCalc'])
 
 if __name__=="__main__": 
     import numpy as np
@@ -55,13 +65,12 @@ if __name__=="__main__":
     #hl.Mach_bypass = .95
     
     print "======================"
-    print "Design"
-    print "======================"
-    print helium.cost
-
-
-    print "======================"
-    print "Performance"
-    print "======================"
+    print "Using Helium @", 1000, "ft, for a 24hr rise time"
+    print "Volume Required:", b.volume
+    print "Gas Cost", b.cost
+    print "Balloon Cost", b.b_cost
+    print "----------------------"
+    print "Payload Area: ", b.area
+    print "Payload Terminal Velocity: ", b.v_terminal
     
 
