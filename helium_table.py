@@ -9,7 +9,7 @@ from numpy import float as numpy_float
 
 #Helium Table (30,000 ft)
 m =   array([34,  70, 190,  370,  700, 1400,  2500], dtype=numpy_float) #, desc='Max Liftable Weight', units='kg'
-v = array([100, 200, 500, 1000, 2000, 5000, 10000], dtype=numpy_float) #, desc='Helium Volume', units='m**3')
+v =  array([100, 200, 500, 1000, 2000, 5000, 10000], dtype=numpy_float) #, desc='Helium Volume', units='m**3')
 
 #Helium Table (65,000 ft)
 m2 =   array([7.5,  15,   38,   75,  150,   380,   720,  1300,   2900], dtype=numpy_float) #, desc='Max Liftable Weight', units='kg')

@@ -4,8 +4,7 @@
 from openmdao.main.api import Component, VariableTree
 from openmdao.lib.datatypes.api import Float, VarTree
 from numpy import interp
-import numpy as np
-from scipy import interpolate
+
 
 from helium_table import alt, g, density
 

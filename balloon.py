@@ -9,6 +9,7 @@ from gas_library import Gas, helium, hydrogen
 from payload_library import *
 from helium_table import *
 from balloon_calc import *
+from gas_calc import *
 
 class Balloon(Assembly):
     #Inputs
@@ -27,21 +28,20 @@ class Balloon(Assembly):
         #Add Components
         self.add('GHAPS', GHAPS())
         self.add('NASA_Fly', NASA_Fly())
-        #self.add('GasCalc', GasCalc())
+        self.add('GasCalc', GasCalc())
         self.add('BalloonCalc', BalloonCalc())
         #self.add('Ascent', Ascent())
 
         #-----------Component Connections-----------#
         #Top level connections
         self.connect('payload_mass', 'NASA_Fly.mass')
+        self.connect('payload_mass','GasCalc.payload_mass')
 
         #InterComponent Connections
         #GHAPS -> NASA_Fly
         self.connect('GHAPS.v_terminal', 'NASA_Fly.v_terminal')
-        #NASA_Fly -> GasCalc
-        #self.connect('NASA_Fly.mass','GasCalc.payload_mass')
         #GasCalc -> BalloonCalc
-        self.connect('GasCalc.gas_vol','BallCalc.volume')
+        #self.connect('GasCalc.gas_vol','BallCalc.volume')
         #Feedback
         #BalloonCalc -> GasCalc
         #self.connect('BallCalc.balloon_mass','GasCalc.balloon_mass')
@@ -58,7 +58,7 @@ class Balloon(Assembly):
         driver.workflow.add('solver')
         
         #Declare Solver Workflow
-        solver.workflow.add(['GHAPS','NASA_Fly'])#,'GasCalc','BallCalc','Ascent'])
+        solver.workflow.add(['GHAPS','NASA_Fly','GasCalc'])#,'BallCalc','Ascent'])
 
 if __name__=="__main__": 
     import numpy as np
@@ -68,8 +68,8 @@ if __name__=="__main__":
     
     print "======================"
     print "Using Helium @", 1000, "ft, for a 24hr rise time"
-    print "Volume Required:", b.volume
-    print "Gas Cost", b.NASA_Fly.side_len
+    print "Volume Required:", b.GasCalc.volume
+    print "Gas Cost", b.GasCalc.gas_cost
     #print "Balloon Cost", b.b_cost
     print "----------------------"
     #print "Payload Area: ", b.area
