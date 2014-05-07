@@ -1,10 +1,13 @@
+#import openMDAO functionality
 from openmdao.main.api import Assembly, Component, VariableTree
 from openmdao.lib.datatypes.api import Float, Int, Str, VarTree
 
+from openmdao.main.api import convert_units as cu
+
+#import local files
 from gas_library import Gas, helium, hydrogen
 from payload_library import *
-
-from openmdao.main.api import convert_units as cu
+from helium_table import *
 
 class Balloon(Assembly):
     #Inputs
@@ -15,9 +18,8 @@ class Balloon(Assembly):
     max_rise_time = Float(24, iotype='h', desc='Maximum balloon rise time')
 
     #GHAPS Constants
-    Gmass = 
 
-    def configure(self):
+    #def configure(self):
 
         #Add Components
         #compress = self.add('compress', CompressionSystem())
