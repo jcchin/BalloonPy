@@ -12,18 +12,20 @@ class GasCalc(Component):
 	payload_mass = Float(iotype='in', desc='', units='kg')
 	
 	#Constants
-	thickness = Float(0.00002, desc='balloon thickness', units='m')
+	balloon_weight = Float(1, desc='balloon weight', units='kg')
 	#Outputs
-	volume = Float(iotype='in', desc='', units='m**3')
+	estimate_weight = Float(iotype='out', desc='', units='kg')
+	volume = Float(iotype='out', desc='', units='m**3')
 	gas_cost = Float(iotype='out', desc='', units='USD')
 	gas_weight = Float(iotype='out', desc='', units='kg')
 
 	def execute(self):
 		#mass = self.payload_mass #normal interpolation
-		mass = min(m, key=lambda x:x-self.payload_mass if x-self.payload_mass> 0 else 9999) #round up to nearest table point
+		mass = min(m3, key=lambda x:x-self.payload_mass if x-self.payload_mass> 0 else 9999) #round up to nearest table point
 		#mass = min(m, key=lambda x:abs(x-self.payload_mass)) #round up to nearest table point
+		self.estimate_weight = mass
 
-		self.volume = interp(mass, m, v)
+		self.volume = interp(mass, m3, v3)
 		self.gas_cost = self.volume * helium.cost
 		self.gas_weight = self.volume * helium.rho_stp
 

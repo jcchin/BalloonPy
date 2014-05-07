@@ -68,8 +68,10 @@ if __name__=="__main__":
     
     print "======================"
     print "Using Helium @", 1000, "ft, for a 24hr rise time"
-    print "Volume Required:", b.GasCalc.volume
-    print "Gas Cost", b.GasCalc.gas_cost
+    print "Volume Required:", b.GasCalc.volume, "m^3"
+    print "Gas Cost $", b.GasCalc.gas_cost, "for ", b.GasCalc.estimate_weight, "kg"
+    print "Gas Weight ", b.GasCalc.gas_weight, "kg"
+    print "Total Weight ", b.GasCalc.gas_weight + b.NASA_Fly.mass, "kg"
     #print "Balloon Cost", b.b_cost
     print "----------------------"
     #print "Payload Area: ", b.area

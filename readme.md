@@ -6,4 +6,4 @@ Install Instructions: http://openmdao.org/docs/getting-started/index.html
 
 Activate Environment
 
-Run 'python ballon.py'
+Run 'python balloon.py'
